@@ -4,11 +4,11 @@
 
 #include <vector>
 #include <windows.h>
-#include<map>
+#include <map>
 #include <string>
 
 //
-// 加快搜索的方法是，
+// 加快搜索的方法是:
 //      1、增大跳转，分析 pattern 的长度分布，如果个别的有 1， 2， 其他都大于 7 ，可以更改 B=3，对长度1,2的做单独处理
 //      2、增大 shift 表
 //
