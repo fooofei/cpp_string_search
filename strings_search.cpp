@@ -16,7 +16,7 @@
 //
 //
 
-// if find , return the off in text , if not find, return the text_size.
+// if find, return the off in text, if not find, return the text_size.
 
 size_t boyermoore_horspool_memmem(const void * text, size_t text_size,
                                   const void * pattern, size_t pattern_size)
@@ -63,7 +63,7 @@ size_t boyermoore_horspool_memmem(const void * text, size_t text_size,
 }
 
 
-// if find , return the off in text , if not find, return the text_size.
+// if find, return the off in text, if not find, return the text_size.
 
 size_t sunday_memmem(const void * text, size_t text_size,
                                   const void * pattern, size_t pattern_size)
