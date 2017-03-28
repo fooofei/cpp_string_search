@@ -1,4 +1,4 @@
-
+ï»¿
 
 #include <stdio.h>
 #include <vector>
@@ -10,9 +10,9 @@
 
 
 //
-// horspool ¸ú sunday µÄÇø±ğÔÚÓÚ²»Æ¥ÅäÊ±£¬Ñ¡È¡ÄÄ¸ö×Ö·û×öÌø×ª:
-//     horspool: Ñ¡È¡µ±Ç°Æ¥ÅäµÄ×îºóÒ»¸ö×Ö·û
-//     sunday: Ñ¡È¡µ±Ç°Æ¥ÅäµÄ×îºó×Ö·ûµÄÏÂÒ»¸ö×Ö·û
+// horspool è·Ÿ sunday çš„åŒºåˆ«åœ¨äºä¸åŒ¹é…æ—¶ï¼Œé€‰å–å“ªä¸ªå­—ç¬¦åšè·³è½¬:
+//     horspool: é€‰å–å½“å‰åŒ¹é…çš„æœ€åä¸€ä¸ªå­—ç¬¦
+//     sunday: é€‰å–å½“å‰åŒ¹é…çš„æœ€åå­—ç¬¦çš„ä¸‹ä¸€ä¸ªå­—ç¬¦
 //
 //
 
@@ -128,7 +128,7 @@ void test_horspool()
     texts.push_back(std::make_pair("abcdefghijklmnopqrst","ghij"));
     texts.push_back(std::make_pair("abcdefghijklmnopqrst","abcdefg"));
     texts.push_back(std::make_pair("abcdefghijklmnopqrst","pqrst"));
-    texts.push_back(std::make_pair("abcdefghijklÎÒ²Ámnopqrst","ÎÒ²Á"));
+    texts.push_back(std::make_pair("abcdefghijklæˆ‘æ“¦mnopqrst","æˆ‘æ“¦"));
 
 
     for (size_t i=0;i<texts.size();++i)
@@ -173,7 +173,7 @@ void test_sunday()
     texts.push_back(std::make_pair("abcdefghijklmnopqrst","ghij"));
     texts.push_back(std::make_pair("abcdefghijklmnopqrst","abcdefg"));
     texts.push_back(std::make_pair("abcdefghijklmnopqrst","pqrst"));
-    texts.push_back(std::make_pair("abcdefghijklÎÒ²Ámnopqrst","ÎÒ²Á"));
+    texts.push_back(std::make_pair("abcdefghijklæˆ‘æ“¦mnopqrst","æˆ‘æ“¦"));
 
 
     for (size_t i=0;i<texts.size();++i)

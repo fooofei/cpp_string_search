@@ -1,4 +1,4 @@
-
+ï»¿
 #include "stdafx.h"
 #include "wumanber_search.h"
 #include <assert.h>
@@ -24,7 +24,7 @@ DWORD wumanber_search_t::_hash(size_t B, size_t H, const void * p)
     switch (B)
     {
     case 2:
-        return ((DWORD)(H-1) & ( (*(pb-2)<<8) | (*(pb-1)))) ; // ÕâÀïÒ²¿ÉÒÔ±ä
+        return ((DWORD)(H-1) & ( (*(pb-2)<<8) | (*(pb-1)))) ; // è¿™é‡Œä¹Ÿå¯ä»¥å˜
     case 3: 
         return ((DWORD)(H-1) & (((*(pb-3))<<16) | (*(pb-2))<<8) | (*(pb-1)));
     default: return 0;
@@ -45,7 +45,7 @@ HRESULT wumanber_search_t::push_pattern(const void * begin, const void * end, si
     const unsigned char * e = (const unsigned char *)end;
     size_t l = (e-b);
 
-    if (B<=l) // ¹ı¶ÌµÄ×Ö·û¾Í·ÅÈëÆäËûµÄ±íÖĞ£¬²»È»·Ç³£Ó°ÏìÌø×ªµÄĞÔÄÜ
+    if (B<=l) // è¿‡çŸ­çš„å­—ç¬¦å°±æ”¾å…¥å…¶ä»–çš„è¡¨ä¸­ï¼Œä¸ç„¶éå¸¸å½±å“è·³è½¬çš„æ€§èƒ½
     {
         min_pattern_size_ = (std::min<size_t>)(min_pattern_size_,l);
     }
@@ -228,16 +228,16 @@ void test_wumanber()
     // only add this
     std::string texts[]=
     {
-        "ÕâÊÇÒ»¸ö·Ç·¨ÍøÕ¾www.game8118.com/£¬Çë¶³½á¡£",
+        "è¿™æ˜¯ä¸€ä¸ªéæ³•ç½‘ç«™www.game8118.com/ï¼Œè¯·å†»ç»“ã€‚",
         "this is an invalid url:www.game8118.com/, please lock it.",
         "www.game8118.com/1",
-        "www.soku.com/²âÊÔÒÔÄ³¸öpattern¿ªÍ·",
-        "²âÊÔÒÔÄ³¸öpattern½áÊøwww.sosocxw.com/",
-        "²âÊÔÖĞÎÄËÑË÷abcdefg",
-        "abcdefg²âÊÔÖĞÎÄËÑË÷",
-        "²âÊÔpatternÖØ¸´.1000tuan.com/",
-        ".1000tuan.com/²âÊÔpatternÖØ¸´",
-        "²âÊÔ¶à¸öpattern,.51buy.com/,²âÊÔ¶à¸öpattern.ftuan.com/",
+        "www.soku.com/æµ‹è¯•ä»¥æŸä¸ªpatternå¼€å¤´",
+        "æµ‹è¯•ä»¥æŸä¸ªpatternç»“æŸwww.sosocxw.com/",
+        "æµ‹è¯•ä¸­æ–‡æœç´¢abcdefg",
+        "abcdefgæµ‹è¯•ä¸­æ–‡æœç´¢",
+        "æµ‹è¯•patterné‡å¤.1000tuan.com/",
+        ".1000tuan.com/æµ‹è¯•patterné‡å¤",
+        "æµ‹è¯•å¤šä¸ªpattern,.51buy.com/,æµ‹è¯•å¤šä¸ªpattern.ftuan.com/",
     };
 
     std::vector<struct wumanber_search_t::result_t> results;
