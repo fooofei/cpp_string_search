@@ -1,7 +1,7 @@
 ﻿
-#include "stdafx.h"
 #include "wumanber_search.h"
 #include <assert.h>
+#include "unit_test_macro.h"
 
 size_t wumanber_search_t::table_size(size_t pattern_size, size_t pattern_min_size)
 {
@@ -268,14 +268,15 @@ void test_wumanber()
     }
 
     hr = wumanber.init();
-    assert(hr == S_OK);
+    //assert(hr == S_OK);
+    EXPECT(hr == S_OK);
 
     for (size_t i=0; i< results.size(); ++i)
     {
         const std::string & t = texts[i];
         hr = wumanber.search(t.c_str(),t.c_str()+t.size(),&results[i]);
-        assert(hr == S_OK);
-        assert(results[i].check_r == results[i].hit_r);
+        EXPECT(hr == S_OK);
+        EXPECT(results[i].check_r == results[i].hit_r);
         printf("[%2d]%s ->hit at->",i,t.c_str());
         results[i].fprintf_result(stdout);
         printf("\n");
