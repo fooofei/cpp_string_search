@@ -11,10 +11,6 @@
 
 
 
-// if find, return the off in text, if not find, return the text_size.
-typedef size_t (*pfn_memmem)(const void * text, size_t text_size,
-                     const void * pattern, size_t pattern_size);
-
 //
 // horspool 跟 sunday 的区别在于不匹配时，选取哪个字符做跳转:
 //     horspool: 选取当前匹配的最后一个字符
@@ -176,13 +172,47 @@ size_t rabin_karp_memmem(const void * text, size_t text_size,
     return text_size;
 }
 
+size_t zzl_memmem(const void * text, size_t text_size,
+                  const void * pattern, size_t pattern_size)
+{
+    const unsigned char * begin = (const unsigned char *)text;
+    const unsigned char * end = begin + text_size;
+    const unsigned char * begin_pattern = (const unsigned char *)pattern;
+    const unsigned char * end_pattern = begin_pattern + pattern_size;
+
+    if (!(begin && begin_pattern && text_size && pattern_size && pattern_size <= text_size))
+    {
+        return text_size;
+    }
+
+    std::vector<const unsigned char *> array_next;
+    for (const unsigned char * p = begin , *e = end-pattern_size;p<e;++p)
+    {
+        if (*p == *begin_pattern)
+        {
+            array_next.push_back(p);
+        }
+    }
+
+    for (size_t i=0;i<array_next.size();++i)
+    {
+        const unsigned char * p = array_next[i];
+        if (0 == std::memcmp(p,begin_pattern,pattern_size))
+        {
+            return p-begin;
+        }
+    }
+
+    return text_size;
+}
 
 #include <iostream>
 #include <fstream>
 #include <string>
 
 
-void test_single_pattern(pfn_memmem func_memmem, const char * func_name)
+void test_single_pattern(size_t (*func_memmem)(const void * , size_t ,const void * , size_t ), 
+                         const char * func_name)
 {
     std::vector<std::pair<std::string, std::string> > texts;
 
@@ -234,8 +264,10 @@ int main(int argc, const TCHAR ** argv)
     test_single_pattern(sunday_memmem, "sunday");
     printf("\n");
     test_single_pattern(rabin_karp_memmem, "rabin_karp");
-
     printf("\n");
+    test_single_pattern(zzl_memmem,"zzl");
+    printf("\n");
+
     //test_wumanber();
    
     return 0;
