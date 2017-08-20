@@ -3,13 +3,8 @@
 #include <stdio.h>
 #include <vector>
 #include <map>
-#include <windows.h>
-#include <assert.h>
 
-#include "wumanber_search.h"
-#include "unit_test_macro.h"
-
-
+#include "../include/string_search/string_search.h"
 
 //
 // horspool 跟 sunday 的区别在于不匹配时，选取哪个字符做跳转:
@@ -58,7 +53,7 @@ size_t boyermoore_horspool_memmem(const void * text, size_t text_size,
             return ptr-begin-pattern_size;
         }
         size_t shift = shift_table[*ptr];
-        assert(shift);
+        //assert(shift);
         ptr += shift;
     }
     return text_size;
@@ -103,7 +98,7 @@ size_t sunday_memmem(const void * text, size_t text_size,
             return ptr-begin-pattern_size;
         }
         size_t shift = shift_table[*ptr];
-        assert(shift);
+        //assert(shift);
         ptr += shift;
     }
     return text_size;
@@ -204,71 +199,4 @@ size_t zzl_memmem(const void * text, size_t text_size,
     }
 
     return text_size;
-}
-
-#include <iostream>
-#include <fstream>
-#include <string>
-
-
-void test_single_pattern(size_t (*func_memmem)(const void * , size_t ,const void * , size_t ), 
-                         const char * func_name)
-{
-    std::vector<std::pair<std::string, std::string> > texts;
-
-
-    texts.push_back(std::make_pair("substring searching","search"));
-    texts.push_back(std::make_pair("CPM_annual_conference_announce","announce"));
-    texts.push_back(std::make_pair("tartarget","target"));
-    texts.push_back(std::make_pair("",""));
-    texts.push_back(std::make_pair("source","rced"));
-    texts.push_back(std::make_pair("source","a"));
-    texts.push_back(std::make_pair("abcdefghijklmnopqrst","aaaa"));
-    texts.push_back(std::make_pair("abcdefghijklmnopqrst","ghij"));
-    texts.push_back(std::make_pair("abcdefghijklmnopqrst","abcdefg"));
-    texts.push_back(std::make_pair("abcdefghijklmnopqrst","pqrst"));
-    texts.push_back(std::make_pair("abcdefghijkl我擦mnopqrst","我擦"));
-
-
-    for (size_t i=0;i<texts.size();++i)
-    {
-        const std::string & s1 = texts[i].first;
-        const std::string & s2 = texts[i].second;
-
-        size_t off = func_memmem(s1.c_str(),s1.size(),s2.c_str(),s2.size());
-        if (off < s1.size())
-        {
-            EXPECT(0==memcmp(s1.c_str()+off,s2.c_str(),s2.size()));
-        }
-        printf("[%2d]%s ->[%d]at %d ->%s\n",i,s1.c_str(),s1.size(),off,s2.c_str());
-    }
-    printf("%s : 100%% pass\n",func_name);
-}
-
-void test_hash()
-{
-    size_t H = 0x10000;
-    const unsigned char p[] ="ab";
-    DWORD h1= ((DWORD)(H-1) & ( (*(p)<<8) | (*(p+1)))) ;
-
-    DWORD h2 = *((const unsigned short *)p);
-
-    printf("hash1 %d, hash2 %d\n",h1,h2);
-}
-
-
-int main(int argc, const TCHAR ** argv)
-{
-    test_single_pattern(boyermoore_horspool_memmem, "boyermoore_horspool");
-    printf("\n");
-    test_single_pattern(sunday_memmem, "sunday");
-    printf("\n");
-    test_single_pattern(rabin_karp_memmem, "rabin_karp");
-    printf("\n");
-    test_single_pattern(zzl_memmem,"zzl");
-    printf("\n");
-
-    //test_wumanber();
-   
-    return 0;
 }
