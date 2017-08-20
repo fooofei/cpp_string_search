@@ -35,6 +35,7 @@ endif ()
 add_library(${PROJECT_NAME} STATIC ${CMAKE_CURRENT_SOURCE_DIR}/src/string_search.cpp)
 target_sources(${PROJECT_NAME} PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/src/wumanber_search.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/ac_search.cpp
     )
 
 

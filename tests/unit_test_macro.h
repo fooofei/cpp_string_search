@@ -2,6 +2,7 @@
 #ifndef UNIT_TEST_MACRO_H_
 #define UNIT_TEST_MACRO_H_
 
+#include <cstdlib>
 
 #ifndef EXPECT
 #define EXPECT(expr) \

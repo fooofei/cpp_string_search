@@ -3,8 +3,6 @@
 #define WUMANBER_SEARCH_H_
 
 #include <vector>
-#include <map>
-#include <string>
 #include <stdint.h>
 
 
@@ -37,20 +35,13 @@
 //
 class wumanber_search_t
 {
-public:
     typedef std::vector<size_t> index_table_t;
     typedef std::vector<uint32_t> dword_table_t;
     typedef std::vector<const void *> pointer_table_t;
     // pattern 's [begin, end) table
-    typedef std::vector<std::pair<const void *,const void*> > pattern_table_t;
+    typedef std::vector<std::pair<const void *, const void*> > pattern_table_t;
 
-    typedef void (*pfn_callback_hit_pattern)(void * context
-                                            , bool * is_continue_search
-                                            , size_t off_in_text
-                                            , size_t index_in_pattern_table
-                                            , const void * begin, const void * end);
 
-private:
     index_table_t byte_table_; // size() = 0x100
     size_t byte_pattern_count_;
     index_table_t short_table_; // size() = 0x10000
@@ -60,8 +51,17 @@ private:
     index_table_t hash_chain_table_;
     dword_table_t prefix_table_;
     pattern_table_t patterns_pointer_;
-    size_t B ;
+    size_t B;
     size_t min_pattern_size_;
+
+public:
+    typedef void(*pfn_callback_hit_pattern)(void * context
+        , bool * is_continue_search
+        , size_t off_in_text
+        , size_t index_in_pattern_table
+        , const void * begin, const void * end);
+
+   
 public:
     void reset()
     {

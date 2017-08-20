@@ -1,0 +1,10 @@
+这是一个非法网站www.game8118.com/，请冻结。
+this is an invalid url:www.game8118.com/, please lock it.
+www.game8118.com/1
+www.soku.com/测试以某个pattern开头
+测试以某个pattern结束www.sosocxw.com/
+测试中文搜索abcdefg
+abcdefg测试中文搜索
+测试pattern重复.1000tuan.com/
+.1000tuan.com/测试pattern重复
+测试多个pattern,.51buy.com/,测试多个pattern.ftuan.com/

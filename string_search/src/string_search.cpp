@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <vector>
 #include <map>
+#include <cstring> // std::memchr
+#include <limits.h> // UCHAR_MAX
+
 
 #include "../include/string_search/string_search.h"
 

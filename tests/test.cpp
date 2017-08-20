@@ -1,11 +1,16 @@
 
 
-
+#include <map>
+#include <iostream>
+#include <fstream>
+#include <cstdio>
+#include <cstring>// std::memset ...
+#include <string>
+#include "string_search/string_search.h"
 #include "string_search/wumanber_search.h"
+#include "string_search/ac_search.h"
 #include "unit_test_macro.h"
 
-
-#include <fstream>
 
 #ifndef _countof
 #define _countof(x) (sizeof((x))/sizeof((x[0])))
@@ -44,46 +49,48 @@ static void callback_hit_pattern_strings(void * context,
     *is_continue = true;
 }
 
-void test_wumanber()
+void readlines_from_file(const char * name, std::vector<std::string> & container)
 {
-    std::ifstream f("test_wumanber.txt");
+    std::ifstream f(name,std::ios::in | std::ios::binary);
+
+    for (std::string line; f.peek() != EOF;)
+    {
+        std::getline(f, line);
+        if (!line.empty())
+        {
+            container.push_back(line);
+        }
+    }
+
+}
+
+
+// how to print utf-8 on Windows is a question, not through the encoding convert.
+void test_wumanber_ac()
+{
     int hr;
     std::vector<std::string> patterns;
+    std::vector<std::string> texts;
     wumanber_search_t wumanber;
+    ac_search_t ac;
     size_t index=0;
 
 
+    readlines_from_file("test_wumanber.txt", patterns);
+    readlines_from_file("test_text.txt", texts);
+
     // only add this
-    std::string texts[]=
-            {
-                    "这是一个非法网站www.game8118.com/，请冻结。",
-                    "this is an invalid url:www.game8118.com/, please lock it.",
-                    "www.game8118.com/1",
-                    "www.soku.com/测试以某个pattern开头",
-                    "测试以某个pattern结束www.sosocxw.com/",
-                    "测试中文搜索abcdefg",
-                    "abcdefg测试中文搜索",
-                    "测试pattern重复.1000tuan.com/",
-                    ".1000tuan.com/测试pattern重复",
-                    "测试多个pattern,.51buy.com/,测试多个pattern.ftuan.com/",
-            };
-
+    
+   
     std::vector<struct result_t> results;
-    results.resize(_countof(texts));
-
-    for (std::string line;f.peek() != EOF;)
-    {
-        std::getline(f,line);
-        if (!line.empty())
-        {
-            patterns.push_back(line);
-        }
-    }
+    results.resize(texts.size());
 
     for (size_t i = 0; i< patterns.size() ; ++i)
     {
         const std::string & s = patterns[i];
-        wumanber.push_pattern(s.c_str(),s.c_str()+s.size(),&index);
+        wumanber.push_pattern(s.c_str(), s.c_str() + s.size(), &index);
+        ac.push_pattern(s.c_str(), s.c_str() + s.size(), &index);
+        
 
         for (size_t i=0;i< results.size();++i)
         {
@@ -99,25 +106,35 @@ void test_wumanber()
     //assert(hr == S_OK);
     EXPECT(hr == S_OK);
 
+    hr = ac.init();
+    //assert(hr == S_OK);
+    EXPECT(hr == S_OK);
+
     for (size_t i=0; i< results.size(); ++i)
     {
         const std::string & t = texts[i];
         hr = wumanber.search(t.c_str(),t.c_str()+t.size(),callback_hit_pattern_strings,&results[i]);
         EXPECT(hr == S_OK);
         EXPECT(results[i].check_r == results[i].hit_r);
-        printf("[%2lu]%s ->hit at->",i,t.c_str());
+        printf("wumaber::[%2lu]%s ->hit at->",i,t.c_str());
         results[i].fprintf_result(stdout);
         printf("\n");
+
+        results[i].hit_r.clear();
+        hr = ac.search(t.c_str(), t.c_str() + t.size(), callback_hit_pattern_strings, &results[i]);
+        EXPECT(hr == S_OK);
+        EXPECT(results[i].check_r == results[i].hit_r);
+        printf("ac::[%2lu]%s ->hit at->", i, t.c_str());
+        results[i].fprintf_result(stdout);
+        printf("\n");
+
     }
 
     printf("wumanber : 100%% pass\n");
 }
 
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include "string_search/string_search.h"
+
 
 void test_single_pattern(size_t (*func_memmem)(const void * , size_t ,const void * , size_t ),
                          const char * func_name)
@@ -146,7 +163,7 @@ void test_single_pattern(size_t (*func_memmem)(const void * , size_t ,const void
         size_t off = func_memmem(s1.c_str(),s1.size(),s2.c_str(),s2.size());
         if (off < s1.size())
         {
-            EXPECT(0==memcmp(s1.c_str()+off,s2.c_str(),s2.size()));
+            EXPECT(0==std::memcmp(s1.c_str()+off,s2.c_str(),s2.size()));
         }
         printf("[%2lu]%s ->[%lu]at %lu ->%s\n",i,s1.c_str(),s1.size(),off,s2.c_str());
     }
@@ -206,7 +223,7 @@ int main()
     test_single_pattern(zzl_memmem,"zzl");
     printf("\n");
 
-    test_wumanber();
+    test_wumanber_ac();
 
     test_hash2();
     printf("pass all\n");
