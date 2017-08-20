@@ -100,6 +100,4 @@ public:
 };
 
 
-void test_wumanber();
-
 #endif //WUMANBER_SEARCH_H_
