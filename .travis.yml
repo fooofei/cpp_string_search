@@ -9,4 +9,6 @@ addons:
       - cmake
       
 # command to run tests
-script: cd tests && sh command.sh
+script: 
+ - cd tests 
+ - sh command.sh
