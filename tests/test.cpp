@@ -25,16 +25,22 @@ size_t distance_pointer(const void * b, const void * e)
 
 struct result_t
 {
-    typedef std::map<size_t, std::string> result_type;
+    // match which pattern(index), which content(std::string) at where(pos).
+    typedef std::map<size_t, std::pair<size_t, std::string> > result_type;
     result_type check_r;
     result_type hit_r;
 
     void fprintf_result(FILE * f)
     {
-        for (result_type::const_iterator it = check_r.begin(); it != check_r.end();++it)
+        size_t i = 0;
+        for (result_type::const_iterator it = check_r.begin(); it != check_r.end();++it,++i)
         {
-            fprintf(f,"[%lu]%s ",it->first,it->second.c_str());
+            fprintf(f,"    [%lu]at(%lu),pattern_index(%lu),pattern(%s)\n",i,it->second.first,it->first,it->second.second.c_str());
         }
+    }
+    void clear()
+    {
+        hit_r.clear();
     }
 };
 
@@ -45,7 +51,7 @@ static void callback_hit_pattern_strings(void * context,
 {
     struct result_t * results = (struct result_t *)context;
     std::string s((const char *)begin,distance_pointer(begin,end));
-    results->hit_r[index] = s;
+    results->hit_r[index] = std::make_pair(off,s);
     *is_continue = true;
 }
 
@@ -66,71 +72,71 @@ void readlines_from_file(const char * name, std::vector<std::string> & container
 
 
 // how to print utf-8 on Windows is a question, not through the encoding convert.
-void test_wumanber_ac()
+
+template<typename search_t>
+void test_search(const char * name, search_t & search)
 {
     int hr;
     std::vector<std::string> patterns;
     std::vector<std::string> texts;
-    wumanber_search_t wumanber;
-    ac_search_t ac;
-    size_t index=0;
+    size_t index = size_t(-1);
 
 
     readlines_from_file("test_wumanber.txt", patterns);
     readlines_from_file("test_text.txt", texts);
 
     // only add this
-    
-   
+
+
     std::vector<struct result_t> results;
     results.resize(texts.size());
 
-    for (size_t i = 0; i< patterns.size() ; ++i)
+   
+    for (size_t patt_index = 0; patt_index < patterns.size(); ++patt_index)
     {
-        const std::string & s = patterns[i];
-        wumanber.push_pattern(s.c_str(), s.c_str() + s.size(), &index);
-        ac.push_pattern(s.c_str(), s.c_str() + s.size(), &index);
-        
+        const std::string & patt = patterns[patt_index];
+        index = size_t(-1);
+        search.push_pattern(patt.c_str(), patt.c_str() + patt.size(), &index);
 
-        for (size_t i=0;i< results.size();++i)
+        EXPECT(index == patt_index);
+        for (size_t j = 0; j < results.size(); ++j)
         {
-            const std::string & t= texts[i];
-            if (t.find(s) < t.size())
+            const std::string & t = texts[j];
+            size_t off = t.find(patt);
+            if (off < t.size())
             {
-                results[i].check_r[index] =s;
+                results[j].check_r[patt_index] = std::make_pair(off, patt);
             }
         }
     }
 
-    hr = wumanber.init();
-    //assert(hr == S_OK);
+    hr = search.init();
     EXPECT(hr == S_OK);
 
-    hr = ac.init();
-    //assert(hr == S_OK);
-    EXPECT(hr == S_OK);
-
-    for (size_t i=0; i< results.size(); ++i)
+    for (size_t i = 0; i < results.size(); ++i)
     {
         const std::string & t = texts[i];
-        hr = wumanber.search(t.c_str(),t.c_str()+t.size(),callback_hit_pattern_strings,&results[i]);
+        result_t & r = results[i];
+        r.clear();
+        hr = search.search(t.c_str(), t.c_str() + t.size(), callback_hit_pattern_strings, &r);
         EXPECT(hr == S_OK);
-        EXPECT(results[i].check_r == results[i].hit_r);
-        printf("wumaber::[%2lu]%s ->hit at->",i,t.c_str());
-        results[i].fprintf_result(stdout);
+        EXPECT(r.check_r == r.hit_r);
+        printf("%s::[%lu]text(%s) hits count(%lu)", name, i, t.c_str(),r.hit_r.size());
         printf("\n");
-
-        results[i].hit_r.clear();
-        hr = ac.search(t.c_str(), t.c_str() + t.size(), callback_hit_pattern_strings, &results[i]);
-        EXPECT(hr == S_OK);
-        EXPECT(results[i].check_r == results[i].hit_r);
-        printf("ac::[%2lu]%s ->hit at->", i, t.c_str());
-        results[i].fprintf_result(stdout);
+        r.fprintf_result(stdout);
         printf("\n");
 
     }
 
-    printf("wumanber : 100%% pass\n");
+    printf("pass %s\n",name);
+}
+
+void test_wumanber_ac()
+{
+    wumanber_search_t wumanber;
+    ac_search_t ac;
+    test_search("wumanber", wumanber);
+    test_search("ac", ac);
 }
 
 

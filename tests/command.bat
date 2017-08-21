@@ -16,5 +16,5 @@ cmake --build . --config %build_type% || exit /B 1
 
 
 cd ..
-rem cpp_string_search.exe
+cpp_string_search.exe
 rmdir /Q /S build >nul 2>&1

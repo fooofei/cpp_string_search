@@ -22,6 +22,8 @@ if (APPLE)
     set(CMAKE_MACOSX_RPATH 0)
 endif ()
 
+#source_group(headers REGULAR_EXPRESSION  ${CMAKE_CURRENT_SOURCE_DIR}/include/string_search/*)
+#source_group(src REGULAR_EXPRESSION  ${CMAKE_CURRENT_SOURCE_DIR}/src/*)
 
 # point to the who include this CMakeLists.txt
 #message(STATUS "CMAKE_HOME_DIRECTORY=" ${CMAKE_HOME_DIRECTORY})

@@ -27,6 +27,8 @@
 //
 //
 
+// Does it support multi same patterns ? Yes.
+
 //
 // 多数的 wumanber 算法实现没有处理长度小于Ｂ的pattern，这个文件的实现处理了此。
 //

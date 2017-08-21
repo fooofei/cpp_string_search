@@ -154,7 +154,7 @@ int wumanber_search_t::init()
         patterns_hit[index] = true;\
         ++count_hit;\
         bool is_continue=true;\
-        callback(context,&is_continue,distance_pointer(ptr_off,begin)\
+        callback(context,&is_continue,distance_pointer(begin,ptr_off)\
                 ,index,patterns_pointer_[index].first,patterns_pointer_[index].second);\
         if (!is_continue)\
         {\
@@ -209,14 +209,14 @@ int wumanber_search_t::search(const void * ptr_begin, const void * ptr_end
         }
     }
 
-    const unsigned char * ptr_off=begin;
-    for (ptr_off+=min_pattern_size_; ptr_off < end; )
+    const unsigned char * ptr_off2=begin;
+    for (ptr_off2+=min_pattern_size_; ptr_off2 < end; )
     {
-        uint32_t h = _hash(B,shfit_table_.size(),ptr_off);
+        uint32_t h = _hash(B,shfit_table_.size(), ptr_off2);
         size_t shift = shfit_table_[h];
         if ( 0 == shift)
         {
-            const unsigned char * window_begin = ptr_off-min_pattern_size_;
+            const unsigned char * window_begin = ptr_off2 -min_pattern_size_;
 
             uint32_t prefix_hash = _hash(B,shfit_table_.size(),window_begin+B);
 
@@ -229,9 +229,10 @@ int wumanber_search_t::search(const void * ptr_begin, const void * ptr_end
 
                     if (!patterns_hit[index])
                     {
-                        if (!(distance_pointer(b_pattern,e_pattern)>distance_pointer(window_begin,ptr_end))
+                        if ((distance_pointer(b_pattern,e_pattern)<=distance_pointer(window_begin,ptr_end))
                             && 0 == memcmp(b_pattern,window_begin,distance_pointer(b_pattern,e_pattern)))
                         {
+                            const uint8_t * ptr_off = window_begin;
                             WUMANBER_HIT;
                         }
                     }
@@ -240,7 +241,7 @@ int wumanber_search_t::search(const void * ptr_begin, const void * ptr_end
             shift = 1;
         }
 
-        ptr_off += shift;
+        ptr_off2 += shift;
 
     }
 
