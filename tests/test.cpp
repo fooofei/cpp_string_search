@@ -158,7 +158,8 @@ void test_single_pattern(size_t (*func_memmem)(const void * , size_t ,const void
     texts.push_back(std::make_pair("abcdefghijklmnopqrst","ghij"));
     texts.push_back(std::make_pair("abcdefghijklmnopqrst","abcdefg"));
     texts.push_back(std::make_pair("abcdefghijklmnopqrst","pqrst"));
-    texts.push_back(std::make_pair("abcdefghijkl我擦mnopqrst","我擦"));
+    texts.push_back(std::make_pair("abcdefghijkl我擦mnopqrst", "我擦"));
+    texts.push_back(std::make_pair("abcdefghijkl我不擦mnopqrst", "我擦"));
 
 
     for (size_t i=0;i<texts.size();++i)
@@ -171,7 +172,7 @@ void test_single_pattern(size_t (*func_memmem)(const void * , size_t ,const void
         {
             EXPECT(0==std::memcmp(s1.c_str()+off,s2.c_str(),s2.size()));
         }
-        printf("[%2lu]%s ->[%lu]at %lu ->%s\n",i,s1.c_str(),s1.size(),off,s2.c_str());
+        printf("[%lu]text(%s) hit patt(%s) at(%lu)/textsize(%lu)\n",i,s1.c_str(),s2.c_str(),off,s1.size());
     }
     printf("%s : 100%% pass\n",func_name);
 }
