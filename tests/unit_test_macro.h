@@ -9,8 +9,10 @@
     do { \
     if(!(expr)) \
         { \
+        fflush(stdout); \
+        fflush(stderr); \
         fprintf(stderr, "unexpect-> %s:%d\n", __FILE__, __LINE__); \
-        exit(1); \
+        exit(-1); \
         } \
     } while (0)
 #endif
