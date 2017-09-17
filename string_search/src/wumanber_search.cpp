@@ -25,7 +25,7 @@ _hash(size_t B, size_t H, const void *p)
     };
     uint32_t reserve;
   } v;
-  memset(&v, 0, sizeof(v));
+  std::memset(&v, 0, sizeof(v));
   switch (B)
   {
     case 3:
