@@ -30,7 +30,7 @@ struct ac_search_t::node_t
   node_t *fail;
   node_t *child[CHAR_SET_SIZE];
   std::vector <size_t> pattern_indexs;
-  unsigned node_number;
+  uint32_t node_number;
 
   node_t()
   {
@@ -39,7 +39,8 @@ struct ac_search_t::node_t
 
   void clear()
   {
-    std::memset(this, 0, sizeof(*this));
+    fail=0;
+    std::memset(child,0,sizeof(child));
     pattern_indexs.clear();
     node_number = 0;
   }
@@ -125,13 +126,24 @@ void node_free1(alloc_type **p)
 }
 
 static
-size_t distance_pointer(const void *b, const void *e)
+size_t 
+distance_pointer(const void *b, const void *e)
 {
   return ((const unsigned char *) e - (const unsigned char *) b);
 }
 
+ac_search_t::ac_search_t() : root_(NULL), pool_(NULL)
+{
+  ;
+}
+ac_search_t::~ac_search_t()
+{
+  clear();
+}
 
-int ac_search_t::push_pattern(const void *begin, const void *end, size_t *index)
+
+int 
+ac_search_t::push_pattern(const void *begin, const void *end, size_t *index)
 {
   if (!(begin && end)) return E_INVALIDARG;
 
@@ -175,7 +187,8 @@ int ac_search_t::push_pattern(const void *begin, const void *end, size_t *index)
   return 0;
 }
 
-int ac_search_t::init()
+int 
+ac_search_t::init()
 {
   if (!root_)
   {
@@ -231,7 +244,8 @@ int ac_search_t::init()
 }
 
 
-int ac_search_t::search(const void *ptr_begin, const void *ptr_end, pfn_callback_hit_pattern callback, void *context
+int 
+ac_search_t::search(const void *ptr_begin, const void *ptr_end, pfn_callback_hit_pattern callback, void *context
 )
 {
   if (!(ptr_begin && ptr_end)) return E_INVALIDARG;
@@ -277,10 +291,11 @@ int ac_search_t::search(const void *ptr_begin, const void *ptr_end, pfn_callback
 }
 
 
-void ac_search_t::clear()
+void 
+ac_search_t::clear()
 {
 
-  std::queue < node_t * > q;
+  std::queue <node_t *> q;
 
   typedef std::list<node_t *> list_node_t;
   list_node_t f;
@@ -318,5 +333,4 @@ void ac_search_t::clear()
     delete pool_;
     pool_ = NULL;
   }
-
 }

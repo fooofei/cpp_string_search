@@ -6,12 +6,11 @@
 #include "../include/string_search/wumanber_search.h"
 
 
-typedef unsigned char ubyte;
-
 // 把 p 前面的两个字符作 hash
 // 获得的返回值作为数组的索引，扔 H 进来是为了防止数组越界
 static
-uint32_t _hash(size_t B, size_t H, const void *p)
+uint32_t 
+_hash(size_t B, size_t H, const void *p)
 {
   const uint8_t *pb = (const uint8_t *) p;
   //uint32_t v1
@@ -41,13 +40,15 @@ uint32_t _hash(size_t B, size_t H, const void *p)
 }
 
 static
-size_t distance_pointer(const void *b, const void *e)
+size_t 
+distance_pointer(const void *b, const void *e)
 {
   return ((const unsigned char *) e - (const unsigned char *) b);
 }
 
 static
-size_t table_size(size_t pattern_count, size_t pattern_min_size)
+size_t 
+table_size(size_t pattern_count, size_t pattern_min_size)
 {
   size_t primes[] = {1003, 10007, 100003, 1000003, 10000019, 100000007, 0};
 
@@ -62,8 +63,34 @@ size_t table_size(size_t pattern_count, size_t pattern_min_size)
   return primes[sizeof(primes) / sizeof(primes[0]) - 1];
 }
 
+void 
+wumanber_search_t::clear()
+{
+  byte_table_.clear();
+  short_table_.clear();
+  shfit_table_.clear();
+  hash_table_.clear();
+  hash_chain_table_.clear();
+  prefix_table_.clear();
+  patterns_pointer_.clear();
+  min_pattern_size_ = -1;
+  B = 3;
+  byte_pattern_count_ = 0;
+  short_pattern_count_ = 0;
+}
 
-int wumanber_search_t::push_pattern(const void *begin, const void *end, size_t *index)
+wumanber_search_t::wumanber_search_t()
+{
+  clear();
+}
+
+wumanber_search_t::~wumanber_search_t()
+{
+  clear();
+}
+
+int 
+wumanber_search_t::push_pattern(const void *begin, const void *end, size_t *index)
 {
   if (!(begin && end && end > begin)) return E_INVALIDARG;
 
@@ -84,12 +111,14 @@ int wumanber_search_t::push_pattern(const void *begin, const void *end, size_t *
   return S_OK;
 }
 
-size_t wumanber_search_t::pattern_count() const
+size_t 
+wumanber_search_t::pattern_count() const
 {
   return patterns_pointer_.size();
 }
 
-int wumanber_search_t::init()
+int 
+wumanber_search_t::init()
 {
   size_t count = pattern_count();
 

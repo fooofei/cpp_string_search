@@ -28,22 +28,11 @@ public:
 
 public:
   void clear();
-
-  ac_search_t() : root_(NULL), pool_(NULL)
-  {
-    ;
-  }
-
-  ~ac_search_t()
-  {
-    clear();
-  }
-
+  ac_search_t() ;
+  ~ac_search_t();
 
   int push_pattern(const void *begin, const void *end, size_t *index);
-
   size_t pattern_count();
-
   int init();
 
   // before call search(), you must call init().

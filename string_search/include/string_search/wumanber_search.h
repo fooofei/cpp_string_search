@@ -62,44 +62,18 @@ public:
 
 
 public:
-  void reset()
-  {
-    byte_table_.clear();
-    short_table_.clear();
-    shfit_table_.clear();
-    hash_table_.clear();
-    hash_chain_table_.clear();
-    prefix_table_.clear();
-    patterns_pointer_.clear();
-    min_pattern_size_ = -1;
-    B = 3;
-    byte_pattern_count_ = 0;
-    short_pattern_count_ = 0;
-  }
-
-  wumanber_search_t()
-  {
-    reset();
-  }
-
-  ~wumanber_search_t()
-  {
-    ;
-  }
+  void clear();
+  wumanber_search_t();
+  ~wumanber_search_t();
 
   // 内存外部维护 , push 的时候会计算最小长度
   // int the [begin, end) pattern, no memory copy, return the pattern index in the table.
   int push_pattern(const void *begin, const void *end, size_t *index);
-
   size_t pattern_count() const;
-
   int init();
 
   // before call search(), you must call init().
   int search(const void *ptr_begin, const void *ptr_end, pfn_callback_hit_pattern callback, void *context);
 
-
 };
-
-
 #endif //WUMANBER_SEARCH_H_

@@ -245,9 +245,7 @@ build_prefix_table(const void *pattern, size_t pattern_size, std::vector<size_t>
     for (size_t off = 1; off < table.size(); off += 1)
     {
       table[off] = 0;
-
       size_t off1 = off;
-
       for (;;)
       {
         off1 = table[off1 - 1];
@@ -267,12 +265,8 @@ build_prefix_table(const void *pattern, size_t pattern_size, std::vector<size_t>
           break;
         }
       }
-
-
     }
   }
-
-
   return 0;
 }
 
