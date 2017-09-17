@@ -1,19 +1,14 @@
 
 # cpp string search [![Build Status](https://travis-ci.org/fooofei/cpp_string_search.svg?branch=master)](https://travis-ci.org/fooofei/cpp_string_search)
 
-one pattern: 
+### one pattern' search: 
+- sunday # recommended
+- boyermoore_horspool
+- rabin_karp
+- zzl
+- kmp
 
-boyermoore_horspool
-
-sunday
-
-rabin_karp
-
-zzl
-
-multi patterns:
-
-wumanber
-
-ac
+## multi patterns's search:
+- wumanber # recommended in malware database search
+- ac 
 
