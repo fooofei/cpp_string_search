@@ -3,6 +3,7 @@
 #include <string>
 #include <algorithm>
 #include <string.h>
+#include <cstring> // std::memset
 #include "../include/string_search/wumanber_search.h"
 
 

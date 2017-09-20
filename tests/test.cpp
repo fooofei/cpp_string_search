@@ -3,6 +3,7 @@
 #include <map>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <cstdio>
 #include <cstring>// std::memset ...
 #include <string>
@@ -40,6 +41,16 @@ struct result_t
     }
   }
 
+  void fprintf_result(std::ostringstream & oss)
+  {
+    size_t i = 0;
+    for (result_type::const_iterator it = check_r.begin(); it != check_r.end(); ++it, ++i)
+    {
+      oss << "    " << "[" << i << "]at(" << it->second.first << "),";
+      oss << "pattern_index(" << it->first << "),pattern(" << it->second.second << ")\n";
+    }
+  }
+
   void clear()
   {
     hit_r.clear();
@@ -57,13 +68,34 @@ static void callback_hit_pattern_strings(void *context,
   *is_continue = true;
 }
 
+void getline_of(std::ifstream & f, const std::string & sep, std::string & line)
+{
+  line.clear();
+  int c;
+  for (;f.peek() != EOF;)
+  {
+    c = f.peek();
+    if (c == EOF) {
+      break;
+    }
+    f.get();
+
+    if (sep.find((char)c) < sep.size()){
+      break;
+    }
+    line.append(1,(char)c);
+    
+  }
+}
+
 void readlines_from_file(const char *name, std::vector<std::string> &container)
 {
   std::ifstream f(name, std::ios::in | std::ios::binary);
+  std::string sep("\r\n",2);
 
   for (std::string line; f.peek() != EOF;)
   {
-    std::getline(f, line);
+    getline_of(f,sep,line);
     if (!line.empty())
     {
       container.push_back(line);
@@ -123,11 +155,13 @@ void test_search(const char *name, search_t &search)
     hr = search.search(t.c_str(), t.c_str() + t.size(), callback_hit_pattern_strings, &r);
     EXPECT(hr == S_OK);
     EXPECT(r.check_r == r.hit_r);
-    printf("%s::[%lu]text(%s) hits count(%lu)", name, i, t.c_str(), r.hit_r.size());
-    printf("\n");
-    r.fprintf_result(stdout);
-    printf("\n");
 
+    std::ostringstream oss;
+    oss << name << "::[" << i << "]text(" << t.c_str() << ") hits count(" << r.hit_r.size() << ")\n";
+    r.fprintf_result(oss);
+    oss << "\n";
+    fprintf(stdout,"%s", oss.str().c_str());
+    fflush(stdout);
   }
 
   printf("pass %s\n", name);
@@ -242,6 +276,7 @@ int main()
   test_single_pattern(kmp_memmem, "kmp");
   printf("\n");
 
+  fflush(stdout);
   test_wumanber_ac();
 
   test_hash2();
