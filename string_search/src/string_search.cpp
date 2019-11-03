@@ -1,4 +1,4 @@
-﻿
+
 
 #include <cstring> // std::memchr
 #include <limits.h> // UCHAR_MAX
