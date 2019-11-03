@@ -26,7 +26,7 @@ _hash(size_t B, size_t H, const void* p)
     std::memset(&v, 0, sizeof(v));
     switch (B) {
     case 3:
-        v.v2 = *(pb - 3);
+        v.v2 = *(pb - 3); // fall through
     case 2:
         v.v0 = *(pb - 1);
         v.v1 = *(pb - 2);
@@ -83,8 +83,9 @@ wumanber_search_t::~wumanber_search_t()
 
 int wumanber_search_t::push_pattern(const void* begin, const void* end, size_t* index)
 {
-    if (!(begin && end && end > begin))
+    if (!(begin && end && end > begin)) {
         return E_INVALIDARG;
+    }
 
     if (index) {
         *index = patterns_pointer_.size();
@@ -95,8 +96,7 @@ int wumanber_search_t::push_pattern(const void* begin, const void* end, size_t* 
     const unsigned char* e = (const unsigned char*)end;
     size_t l = (e - b);
 
-    if (B <= l) // 过短的字符就放入其他的表中，不然非常影响跳转的性能
-    {
+    if (B <= l) { // 过短的字符就放入其他的表中，不然非常影响跳转的性能
         min_pattern_size_ = (std::min<size_t>)(min_pattern_size_, l);
     }
     return S_OK;
@@ -112,8 +112,9 @@ int wumanber_search_t::init()
 {
     size_t count = pattern_count();
 
-    if (!(count > 0))
+    if (!(count > 0)) {
         return E_INVALIDARG;
+    }
 
     // assert(B <= min_pattern_size_);
 
@@ -184,13 +185,15 @@ int wumanber_search_t::init()
 
 int wumanber_search_t::search(const void* ptr_begin, const void* ptr_end, pfn_callback_hit_pattern callback, void* context)
 {
-    if (!(ptr_begin && ptr_end && callback))
+    if (!(ptr_begin && ptr_end && callback)) {
         return E_INVALIDARG;
+    }
 
     size_t count = pattern_count();
 
-    if (!(count > 0))
+    if (!(count > 0)) {
         return E_INVALIDARG;
+    }
 
     const unsigned char* begin = (const unsigned char*)ptr_begin;
     const unsigned char* end = (const unsigned char*)ptr_end;
