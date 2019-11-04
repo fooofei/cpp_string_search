@@ -17,3 +17,8 @@ add_custom_command(
         TARGET ${BINARY_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${BINARY_NAME}> ../$<TARGET_FILE_NAME:${BINARY_NAME}>
 )
+
+if(WIN32)
+	target_compile_options(${BINARY_NAME} PRIVATE /source-charset:utf-8 /execution-charset:utf-8)
+	target_compile_definitions(${BINARY_NAME} PRIVATE WIN32)
+endif()

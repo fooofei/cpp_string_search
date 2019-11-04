@@ -1,15 +1,15 @@
 
-#include "../include/string_search/wumanber_search.h"
+#include <stdint.h>
 #include <algorithm>
-#include <cstring> // std::memset
 #include <map>
 #include <string.h>
 #include <string>
 
+#include "../include/string_search/wumanber_search.h"
+
 // 把 p 前面的两个字符作 hash
 // 获得的返回值作为数组的索引，扔 H 进来是为了防止数组越界
-static uint32_t
-_hash(size_t B, size_t H, const void* p)
+static uint32_t _hash(size_t B, size_t H, const void* p)
 {
     const uint8_t* pb = (const uint8_t*)p;
     //uint32_t v1

@@ -38,6 +38,9 @@ add_library(${PROJECT_NAME} STATIC ${CMAKE_CURRENT_SOURCE_DIR}/src/string_search
 target_sources(${PROJECT_NAME} PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/src/wumanber_search.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/ac_search.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/string_search/ac_search.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/string_search/string_search.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/string_search/wumanber_search.h
     )
 
 
@@ -47,4 +50,7 @@ target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
 if (NOT WIN32)
     # fPIC for other library link
     target_compile_options(${PROJECT_NAME} PRIVATE -fPIC)
+else()
+    target_compile_options(${PROJECT_NAME} PRIVATE /source-charset:utf-8 /execution-charset:utf-8)
+	target_compile_definitions(${PROJECT_NAME} PRIVATE WIN32)
 endif()

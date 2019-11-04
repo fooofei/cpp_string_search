@@ -1,6 +1,6 @@
 @echo off
-%~d0
-cd /d %~dp0
+%~dp0%
+cd /d %~dp0%
 
 rem or Debug/Release
 set build_type=Debug
