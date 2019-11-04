@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <vector>
 
+// 因为这份代码歧途与 Windows HRESULT 返回类型相匹配，所以定义 E_XXX 类型宏
 #ifndef E_INVALIDARG
 #define E_INVALIDARG ((int)0x80070057L)
 #endif

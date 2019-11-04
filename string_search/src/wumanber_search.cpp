@@ -1,7 +1,7 @@
 
-#include <stdint.h>
 #include <algorithm>
 #include <map>
+#include <stdint.h>
 #include <string.h>
 #include <string>
 
@@ -146,15 +146,17 @@ int wumanber_search_t::init()
             unsigned short c;
             switch (l) {
             case 1:
-                if (byte_table_.empty())
+                if (byte_table_.empty()) {
                     byte_table_.resize(0x100, count);
+                }
                 hash_chain_table_[i] = byte_table_[*begin];
                 byte_table_[*begin] = i;
                 byte_pattern_count_ += 1;
                 break;
             case 2:
-                if (short_table_.empty())
+                if (short_table_.empty()) {
                     short_table_.resize(0x10000, count);
+                }
                 c = *(const unsigned short*)begin;
                 hash_chain_table_[i] = short_table_[c];
                 short_table_[c] = i;
@@ -238,8 +240,7 @@ int wumanber_search_t::search(const void* ptr_begin, const void* ptr_end, pfn_ca
                     const void* e_pattern = patterns_pointer_[index].second;
 
                     if (!patterns_hit[index]) {
-                        if ((distance_pointer(b_pattern, e_pattern) <= distance_pointer(window_begin, ptr_end))
-                            && 0 == memcmp(b_pattern, window_begin, distance_pointer(b_pattern, e_pattern))) {
+                        if ((distance_pointer(b_pattern, e_pattern) <= distance_pointer(window_begin, ptr_end)) && 0 == memcmp(b_pattern, window_begin, distance_pointer(b_pattern, e_pattern))) {
                             const uint8_t* ptr_off = window_begin;
                             WUMANBER_HIT;
                         }
