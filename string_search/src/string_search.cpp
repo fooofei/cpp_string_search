@@ -275,3 +275,61 @@ kmp_memmem(const void* text, size_t text_size,
 
     return text_size;
 }
+
+// Sunday 算法的 C 语言实现
+// 当参数中不包含字符串长度的时候，这种写法需要时刻判断是否结束了，比较复杂
+int Sunday(const char* str, const char* patt)
+{
+    if (str == NULL || patt == NULL) {
+        return -1;
+    }
+    if (*patt == 0) {
+        return 0;
+    }
+
+    int pattLen = strlen(patt);
+
+    int* shift = (int*)calloc(0x100, sizeof(int));
+
+    for (int i = 0; i < 0x100; i++) {
+        shift[i] = pattLen + 1;
+    }
+    for (int i = 0; i < pattLen; i++) {
+        uint8_t u8 = patt[i];
+        shift[u8] = pattLen - i;
+    }
+
+    // 没有多余的变量记录 str 长度，导致总是依赖迭代判断 '\0'
+    // 看到下面的代码很长
+    char pattEnd = patt[pattLen - 1];
+    const char* p = str;
+    for (int i = pattLen - 1; *p != 0 && i > 0; i--, p++) {
+    }
+    if (*p == 0) {
+        return -1;
+    }
+    p += 1;
+
+    for (;;) {
+        if (*(p - 1) == pattEnd && 0 == memcmp(p - pattLen, patt, pattLen)) {
+            free(shift);
+            return p - pattLen - str;
+        }
+        if (*p == 0) {
+            break;
+        }
+        int step = shift[(uint8_t)(*p)] - 1;
+        for (int i = 0; i < step && *p != 0; i++) {
+            p++;
+        }
+        if (*p == 0) {
+            break;
+        }
+        p++;
+    }
+
+    free(shift);
+    shift = NULL;
+
+    return -1;
+}
