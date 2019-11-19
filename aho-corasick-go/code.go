@@ -8,6 +8,9 @@ package leetcode
 // 等到自动机的什么位置和没有位置的直接到 root
 // search 要 fail 向上找跟找 fail 类似
 
+// 一定要从自动机角度理解 当发现不匹配的时候，就把 [p1 p2 p3 ... pj-1]+pj 输入自动机，还不匹配，依次迭代
+// 把 [p2 p3 ... pj-1]+pj 输入自动机 把[p3 ... pj-1]+pj 输入自动机
+
 import (
 	"log"
 )
