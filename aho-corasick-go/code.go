@@ -1,6 +1,12 @@
 package leetcode
 
 // 一个 AC 自动机的 Golang 语言范本
+// KMP 的 DFA 是立刻能知道当前状态输入字符后下一个状态是什么
+// 不像 AC 自动机还要一层层找
+
+// AC 自动机 fail 代表有前缀的依次看 [p1 p2 p3 ... pj-1]+pj [p2 p3 ... pj-1]+pj [p3 ... pj-1]+pj
+// 等到自动机的什么位置和没有位置的直接到 root
+// search 要 fail 向上找跟找 fail 类似
 
 import (
 	"log"
