@@ -1,6 +1,6 @@
-module leetcode
+module github.com/fooofei/cpp_string_search/aho_corasick
 
-go 1.13
+go 1.16
 
 require (
 	github.com/google/go-cmp v0.3.1 // indirect

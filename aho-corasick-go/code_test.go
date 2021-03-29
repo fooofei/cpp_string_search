@@ -1,4 +1,4 @@
-package leetcode
+package aho_corasick
 
 import (
 	"testing"

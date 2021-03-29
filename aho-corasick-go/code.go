@@ -1,4 +1,4 @@
-package leetcode
+package aho_corasick
 
 // 一个 AC 自动机的 Golang 语言范本
 // KMP 的 DFA 是立刻能知道当前状态输入字符后下一个状态是什么
